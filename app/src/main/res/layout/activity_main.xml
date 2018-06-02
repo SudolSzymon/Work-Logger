@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
     <Button
         android:id="@+id/EditData"
         android:layout_width="0dp"
@@ -49,10 +48,11 @@
             android:textSize="36sp" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/hoursLeft"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="TextView" />
+            android:textAlignment="center"
+            android:textSize="100sp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
