@@ -4,40 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-    <Button
-        android:id="@+id/EditData"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/edit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    tools:context=".MainActivity"
+    android:background="@color/background">
 
     <Button
         android:id="@+id/startButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginBottom="112dp"
+        android:layout_marginBottom="183dp"
+        android:layout_marginEnd="1dp"
         android:background="@drawable/button_bg_round"
         android:padding="15dp"
         android:text="@string/start"
-        app:layout_constraintBottom_toTopOf="@+id/EditData"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/editData"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_bg_round"
+        android:padding="15dp"
+        android:text="@string/settings"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
         android:layout_width="368dp"
         android:layout_height="209dp"
-        android:layout_marginBottom="28dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/startButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -48,6 +53,7 @@
             android:layout_height="wrap_content"
             android:text="@string/hours_left_this_week"
             android:textAlignment="center"
+            android:textColor="@color/textColor"
             android:textSize="36sp" />
 
         <TextView
@@ -55,21 +61,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
+            android:textColor="@color/textColor"
             android:textSize="90sp" />
     </LinearLayout>
 
     <Button
         android:id="@+id/SkipOneDay"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="38dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="74dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/button_bg_round"
+        android:padding="15dp"
         android:text="@string/one_day_free"
-        app:layout_constraintBottom_toTopOf="@+id/EditData"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startButton" />
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

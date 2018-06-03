@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button edit = findViewById(R.id.EditData);
+        Button edit = findViewById(R.id.editData);
         open("data");
         if(engine==null) engine=new Engine();
         hoursLeft=findViewById(R.id.hoursLeft);
