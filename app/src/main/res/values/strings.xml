@@ -13,4 +13,8 @@
     <string name="sunday">Sunday</string>
     <string name="save">Save</string>
     <string name="round_button">Round Button</string>
+    <string name="hours_left_this_week">Hours left this week</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="one_day_free">One day free</string>
 </resources>
