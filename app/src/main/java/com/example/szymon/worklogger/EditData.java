@@ -1,13 +1,8 @@
 package com.example.szymon.worklogger;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -21,10 +16,10 @@ public class EditData extends AppCompatActivity {
         EditText hpw=findViewById(R.id.hoursPerWeak);
         save.setOnClickListener(e->quit(hpw.getText().toString()));
         Button cancel=findViewById(R.id.cancel);
-        cancel.setOnClickListener(e->cacel());
+        cancel.setOnClickListener(e-> cancel());
           }
 
-    private void cacel() {
+    private void cancel() {
         setResult(RESULT_CANCELED);
         this.finish();
     }
