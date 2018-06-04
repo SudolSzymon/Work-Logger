@@ -1,16 +1,13 @@
 package com.example.szymon.worklogger;
 
+import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -18,39 +15,40 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import static java.lang.Math.round;
 
 public class MainActivity extends AppCompatActivity {
-
+    @SuppressLint("StaticFieldLeak")
+    private static MainActivity instance=null;
     private TextView hoursLeft;
     private Engine engine;
     private boolean counting=false;
     private Button start;
-
+    public static MainActivity getInstance(){
+        return instance;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button edit = findViewById(R.id.editData);
-        open("data");
-        if(engine==null) engine=new Engine();
         hoursLeft=findViewById(R.id.hoursLeft);
-        hoursLeft.setText(engine.TLString());
+        instance=this;
         edit.setOnClickListener(e -> openEdit());
         start=findViewById(R.id.startButton);
         start.setOnClickListener(e->startCounting());
         Button skip=findViewById(R.id.SkipOneDay);
         skip.setOnClickListener(e->dayFree());
-
+        open("data");
+        if(engine==null) engine=new Engine();
+        updateDisplay();
         Log.i("hpw log", String.valueOf(Engine.HPW));
-
     }
 
     private void dayFree() {
         engine.skipDay();
-        hoursLeft.setText(engine.TLString());
+        updateDisplay();
     }
 
     private void startCounting() {
@@ -62,8 +60,17 @@ public class MainActivity extends AppCompatActivity {
             counting=false;
             engine.stop();
             start.setText(R.string.start);
-            hoursLeft.setText(engine.TLString());
+            updateDisplay();
         }
+    }
+
+    public void updateDisplay() {
+        hoursLeft.setText(engine.TLString());
+        Log.i("display update","called update");
+    }
+
+    public TextView getHoursLeft() {
+        return hoursLeft;
     }
 
     private void openEdit() {
@@ -78,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void save() {
+    void save() {
         try {
             OutputStreamWriter out =
                     new OutputStreamWriter(openFileOutput("data", 0));
@@ -115,8 +122,10 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 engine.refreshTL();
-                hoursLeft.setText(engine.TLString());
+                updateDisplay();
             }
         }
     }
+
+
 }

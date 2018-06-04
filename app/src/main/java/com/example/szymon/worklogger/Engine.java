@@ -10,9 +10,10 @@ public class Engine {
     private Time TL=new Time(0);
     private long startTime;
     public static int workingDays=5;
-
+    private updateScheduler updater;
     Engine(){
         refreshTL();
+        updater=new updateScheduler(this);
     }
     Engine(long timeLeft, LocalDateTime lastUse){
        if(lastUse.getDayOfYear()<LocalDateTime.now().getDayOfYear()||lastUse.getYear()<LocalDateTime.now().getYear()){
@@ -26,6 +27,8 @@ public class Engine {
        }else{
            TL.setTime(timeLeft);
        }
+       updater=new updateScheduler(this);
+
     }
 
     public void refreshTL() {
@@ -34,10 +37,18 @@ public class Engine {
 
     public void start(){
         startTime=System.currentTimeMillis();
+        updater.saveEverySecond();
     }
     public void stop(){
+        updater.stop();
+        update();
+    }
+
+    public void update() {
         TL.setTime(TL.getTime()-(System.currentTimeMillis()-startTime));
-        if(TL.getTime()<0) TL.setTime(0);
+        if(TL.getTime()<0){
+            TL.setTime(0);
+        }
         Log.i("info log", String.valueOf(TL.getTime()));
     }
 
