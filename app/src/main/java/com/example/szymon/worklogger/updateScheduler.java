@@ -12,18 +12,17 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class updateScheduler {
     private Engine engine;
     private TextView display;
-    private MainActivity main;
     private final ScheduledExecutorService scheduler =
             Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> updateHandler;
 
     updateScheduler(Engine engine) {
         this.engine = engine;
-        main=MainActivity.getInstance();
-        this.display=main.getHoursLeft();
+
+        this.display=MainActivity.getInstance().getHoursLeft();
     }
     public void saveEverySecond() {
-        final Runnable saver = () -> update();
+        final Runnable saver = this::update;
 
         updateHandler = scheduler.scheduleAtFixedRate(saver, 0, 5, SECONDS);
     }

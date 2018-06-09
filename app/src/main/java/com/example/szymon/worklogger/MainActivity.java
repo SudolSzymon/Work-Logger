@@ -31,10 +31,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance=this;
         setContentView(R.layout.activity_main);
         Button edit = findViewById(R.id.editData);
         hoursLeft=findViewById(R.id.hoursLeft);
-        instance=this;
         edit.setOnClickListener(e -> openEdit());
         start=findViewById(R.id.startButton);
         start.setOnClickListener(e->startCounting());
@@ -42,8 +42,12 @@ public class MainActivity extends AppCompatActivity {
         skip.setOnClickListener(e->dayFree());
         open("data");
         if(engine==null) engine=new Engine();
+        reviwe();
         updateDisplay();
         Log.i("hpw log", String.valueOf(Engine.HPW));
+    }
+
+    private void reviwe() {
     }
 
     private void dayFree() {
@@ -83,6 +87,12 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
 
+    }
+
+    @Override
+    protected void onPause() {
+        save();
+        super.onPause();
     }
 
     void save() {
