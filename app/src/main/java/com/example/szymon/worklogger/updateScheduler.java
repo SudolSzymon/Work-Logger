@@ -21,7 +21,8 @@ public class updateScheduler {
 
         this.display=MainActivity.getInstance().getHoursLeft();
     }
-    public void saveEverySecond() {
+
+    public void scheduleUpdates() {
         final Runnable saver = this::update;
 
         updateHandler = scheduler.scheduleAtFixedRate(saver, 0, 5, SECONDS);

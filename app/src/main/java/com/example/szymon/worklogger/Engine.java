@@ -2,14 +2,13 @@ package com.example.szymon.worklogger;
 
 import android.util.Log;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 
 public class Engine {
     public static double HPW=42.5;
-    private Time TL=new Time(0);
+    private static int workingDays = 5;
     private long startTime;
-    public static int workingDays=5;
+    private Long TL = 0L;
     private updateScheduler updater;
     Engine(){
         refreshTL();
@@ -22,22 +21,22 @@ public class Engine {
            if(now.isAfter(lastUse)||lastUse.getDayOfWeek().getValue()>=now.getDayOfWeek().getValue())   {
                refreshTL();
            } else {
-               TL.setTime(timeLeft);
+               TL = timeLeft;
            }
        }else{
-           TL.setTime(timeLeft);
+           TL = timeLeft;
        }
        updater=new updateScheduler(this);
 
     }
 
     public void refreshTL() {
-        TL.setTime((long) (HPW*1000*3600));
+        TL = (long) (HPW * 1000 * 3600);
     }
 
     public void start(){
         startTime=System.currentTimeMillis();
-        updater.saveEverySecond();
+        updater.scheduleUpdates();
     }
     public void stop(){
         updater.stop();
@@ -45,21 +44,22 @@ public class Engine {
     }
 
     public void update() {
-        TL.setTime(TL.getTime()-(System.currentTimeMillis()-startTime));
-        if(TL.getTime()<0){
-            TL.setTime(0);
+        TL -= System.currentTimeMillis() - startTime;
+        startTime = System.currentTimeMillis();
+        if (TL < 0L) {
+            TL = 0L;
         }
-        Log.i("info log", String.valueOf(TL.getTime()));
+        Log.i("update  tl log", TL.toString());
     }
 
     public long getTL() {
-        return TL.getTime();
+        return TL;
     }
     public void skipDay(){
-        TL.setTime((long) (TL.getTime()-HPW/workingDays*1000*3600));
+        TL = (long) (TL - HPW / workingDays * 1000 * 3600);
     }
     public String TLString(){
-        if(TL.getTime()<0) TL.setTime(0);
+        if (TL < 0L) TL = 0L;
        return String.valueOf(Math.round(getTL()/10.0/3600)/100.0);
     }
 

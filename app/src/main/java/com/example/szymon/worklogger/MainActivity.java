@@ -1,11 +1,11 @@
 package com.example.szymon.worklogger;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
-import android.content.Intent;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,8 +15,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
-
-import static java.lang.Math.round;
 
 public class MainActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
@@ -40,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         start.setOnClickListener(e->startCounting());
         Button skip=findViewById(R.id.SkipOneDay);
         skip.setOnClickListener(e->dayFree());
-        open("data");
+        open();
         if(engine==null) engine=new Engine();
         reviwe();
         updateDisplay();
@@ -48,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void reviwe() {
+        if (counting) {
+            counting = false;
+            startCounting();
+        }
     }
 
     private void dayFree() {
@@ -99,11 +101,16 @@ public class MainActivity extends AppCompatActivity {
         try {
             OutputStreamWriter out =
                     new OutputStreamWriter(openFileOutput("data", 0));
-            Log.i("info log", String.valueOf(Engine.HPW+"\n"));
+            Log.i("sva hpw log", String.valueOf(Engine.HPW + "\n"));
             out.write(String.valueOf(Engine.HPW+"\n"));
             out.write(String.valueOf(engine.getTL())+"\n");
-            out.write(LocalDateTime.now().toString());
-                Log.i("info log", String.valueOf(engine.getTL()));
+            out.write(LocalDateTime.now().toString() + "\n");
+            Log.i("save tl log", String.valueOf(engine.getTL()));
+            out.write(String.valueOf(System.currentTimeMillis()) + "\n");
+            Log.i("save time log", String.valueOf(System.currentTimeMillis()));
+
+            Log.i("save state log", String.valueOf(counting));
+            out.write(String.valueOf(counting) + "\n");
             out.close();
             Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
         } catch (Throwable t) {
@@ -111,22 +118,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void open(String fileName) {
+    public void open() {
         try {
-            InputStream in = openFileInput(fileName);
+            Log.i("info log", "started reading file");
+            InputStream in = openFileInput("data");
                 InputStreamReader tmp = new InputStreamReader(in);
                 BufferedReader reader = new BufferedReader(tmp);
                 Engine.HPW=Double.parseDouble(reader.readLine());
-            Log.i("info log", String.valueOf(Engine.HPW));
-                engine=new Engine(Long.parseLong(reader.readLine()),LocalDateTime.parse(reader.readLine()));
-            Log.i("info log", String.valueOf(engine.getTL()));
+            Log.i("hpw log", String.valueOf(Engine.HPW));
+            Long lastTL = Long.valueOf(reader.readLine());
+            LocalDateTime lastUse = LocalDateTime.parse(reader.readLine());
+            Log.i("engine tl log", String.valueOf(lastTL));
+            Long exitTime = Long.parseLong(reader.readLine());
+            Log.i("exit time log", String.valueOf(exitTime));
+            counting = Boolean.valueOf(reader.readLine());
+            Log.i("counting log", String.valueOf(counting));
+            if (counting) lastTL = adjustTL(lastTL, exitTime);
+            engine = new Engine(lastTL, lastUse);
                 in.close();
-        }
-        catch (FileNotFoundException ignored) {}
-        catch(Throwable t){
+        } catch (FileNotFoundException ignored) {
+        } catch (Throwable t) {
+            Log.e("error log", t.toString(), t);
                 Toast.makeText(this, "Data loading exception: " + t.toString(), Toast.LENGTH_LONG).show();
             }
     }
+
+    private Long adjustTL(Long lastTL, Long exitTime) {
+        Log.i("adjusting log", "adjusting tl");
+        Long difference = System.currentTimeMillis() - exitTime;
+        if (difference > 0 && difference < 3600 * 16) lastTL -= difference;
+        return lastTL;
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0) {
