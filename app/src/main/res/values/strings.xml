@@ -17,4 +17,5 @@
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="one_day_free">One day free</string>
+    <string name="over_time">Hours over time</string>
 </resources>

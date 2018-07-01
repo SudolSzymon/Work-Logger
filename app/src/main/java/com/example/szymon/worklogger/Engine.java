@@ -10,9 +10,12 @@ public class Engine {
     private long startTime;
     private Long TL = 0L;
     private updateScheduler updater;
+    private boolean isOverTime;
+    private MainActivity mainActivity=MainActivity.getInstance();
     Engine(){
         refreshTL();
         updater=new updateScheduler(this);
+        isOverTime = TL < 0L;
     }
     Engine(long timeLeft, LocalDateTime lastUse){
        if(lastUse.getDayOfYear()<LocalDateTime.now().getDayOfYear()||lastUse.getYear()<LocalDateTime.now().getYear()){
@@ -27,6 +30,7 @@ public class Engine {
            TL = timeLeft;
        }
        updater=new updateScheduler(this);
+        isOverTime = TL < 0L;
 
     }
 
@@ -46,9 +50,8 @@ public class Engine {
     public void update() {
         TL -= System.currentTimeMillis() - startTime;
         startTime = System.currentTimeMillis();
-        if (TL < 0L) {
-            TL = 0L;
-        }
+        isOverTime = TL < 0L;
+        mainActivity.updateDisplay();
         Log.i("update  tl log", TL.toString());
     }
 
@@ -59,8 +62,11 @@ public class Engine {
         TL = (long) (TL - HPW / workingDays * 1000 * 3600);
     }
     public String TLString(){
-        if (TL < 0L) TL = 0L;
+        if (TL < 0L)  return String.valueOf(Math.round(-getTL()/10.0/3600)/100.0);
        return String.valueOf(Math.round(getTL()/10.0/3600)/100.0);
     }
 
+    public boolean isOverTime() {
+        return isOverTime;
+    }
 }

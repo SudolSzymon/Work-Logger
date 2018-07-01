@@ -18,8 +18,6 @@ public class updateScheduler {
 
     updateScheduler(Engine engine) {
         this.engine = engine;
-
-        this.display=MainActivity.getInstance().getHoursLeft();
     }
 
     public void scheduleUpdates() {
@@ -30,7 +28,6 @@ public class updateScheduler {
 
     private void update() {
         engine.update();
-        display.setText(engine.TLString());
         Log.i("display update","called update");
         Log.i("scheduler update","engine works");
 

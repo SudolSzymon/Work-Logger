@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class MainActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     private static MainActivity instance=null;
-    private TextView hoursLeft;
+    private TextView hoursLeft,displayText;
     private Engine engine;
     private boolean counting=false;
     private Button start;
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button edit = findViewById(R.id.editData);
         hoursLeft=findViewById(R.id.hoursLeft);
+        displayText=findViewById(R.id.displayText);
         edit.setOnClickListener(e -> openEdit());
         start=findViewById(R.id.startButton);
         start.setOnClickListener(e->startCounting());
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateDisplay() {
         hoursLeft.setText(engine.TLString());
+        if(engine.isOverTime()) displayText.setText(R.string.over_time);
+        else displayText.setText(R.string.hours_left_this_week);
         Log.i("display update","called update");
     }
 
